@@ -16,13 +16,12 @@
             android:layout_height="wrap_content"
             android:text="返回" />
 
-        <Button
-            android:id="@+id/btn_register"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="忘记密码"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:text="忘记密码"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -37,7 +36,7 @@
             android:text="账号：" />
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入账号" />
@@ -63,7 +62,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/query"
+        android:id="@+id/btn_query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="查询密码"/>

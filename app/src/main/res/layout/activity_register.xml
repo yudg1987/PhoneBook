@@ -17,14 +17,6 @@
             android:text="返回" />
 
         <Button
-            android:id="@+id/btn_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="注册"
-            android:textSize="20dp" />
-
-        <Button
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_toLeftOf="@+id/btn_save"
+            android:layout_centerInParent="true"
             android:text="重置" />
     </RelativeLayout>
     <LinearLayout
@@ -50,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="账号："/>
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/account"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入账号" />
