@@ -20,6 +20,7 @@ public class SqlRegisterActivity extends Activity implements View.OnClickListene
     EditText age;
     RadioGroup sex;
     Button register, back;
+    EditText phone;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +34,7 @@ public class SqlRegisterActivity extends Activity implements View.OnClickListene
         password = findViewById(R.id.passwordRegister);
         age = findViewById(R.id.ageRegister);
         sex = findViewById(R.id.sexRegister);
+        phone = findViewById(R.id.phoneRegister);
         register = findViewById(R.id.Register);
         register.setOnClickListener(this);
 
@@ -52,6 +54,7 @@ public class SqlRegisterActivity extends Activity implements View.OnClickListene
             case R.id.Register:
                 String name = username.getText().toString().trim();
                 String pass = password.getText().toString().trim();
+                String phoneInput = phone.getText().toString().trim();
 
                 if (null == name || "".equals(name)) {
                     Toast.makeText(this, "账号不能为空", 0).show();
@@ -59,6 +62,10 @@ public class SqlRegisterActivity extends Activity implements View.OnClickListene
                 }
                 if (null == pass || "".equals(pass)) {
                     Toast.makeText(this, "密码不能为空", 0).show();
+                    return;
+                }
+                if (null == phoneInput || "".equals(phoneInput)) {
+                    Toast.makeText(this, "手机号不能为空", 0).show();
                     return;
                 }
 
@@ -75,6 +82,7 @@ public class SqlRegisterActivity extends Activity implements View.OnClickListene
                 user.setPassword(pass);
                 user.setAge(Integer.parseInt(agestr));
                 user.setSex(sexstr);
+                user.setPhone(phoneInput);
                 uService.register(user);
                 Toast.makeText(SqlRegisterActivity.this, "注册成功", Toast.LENGTH_LONG).show();
                 Intent it = new Intent();

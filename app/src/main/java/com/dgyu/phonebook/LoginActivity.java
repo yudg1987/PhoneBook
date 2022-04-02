@@ -1,9 +1,12 @@
 package com.dgyu.phonebook;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,11 +29,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText account;
     private EditText password;
 
+    private CheckBox rember;
+    SharedPreferences sp=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        sp=getSharedPreferences("currentUser",MODE_PRIVATE);
+
         btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
 
@@ -45,6 +54,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         account = findViewById(R.id.account);
         password = findViewById(R.id.password);
+
+        rember = findViewById(R.id.rember);
+
+        if(null!=sp){
+            String accountPre=sp.getString("account",null);
+            account.setText(accountPre);
+            password.setText(sp.getString("password",null));
+            if(!TextUtils.isEmpty(accountPre)){
+                rember.setChecked(true);
+            }
+        }
     }
 
     /**
@@ -61,25 +81,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 String accountInput = account.getText().toString();
                 String passwordInput = password.getText().toString();
                 if (null == accountInput || "".equals(accountInput)) {
-                    Toast.makeText(this, "账号不能为空", 0).show();
+                    Toast toast=Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT);
+                    toast.setText("账号不能为空");
+                    toast.show();
                     return;
                 }
                 if (null == passwordInput || "".equals(passwordInput)) {
-                    Toast.makeText(this, "密码不能为空", 0).show();
+                    Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 List<User> users = RegisterActivity.users;
                 if (null == users || users.size() <= 0) {
-                    Toast.makeText(this, "用户不存在，登陆失败", 0).show();
+                    Toast.makeText(this, "用户不存在，登陆失败", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 for (User user : users) {
                     if (user.getAccount().equals(accountInput) && user.getPassword().equals(passwordInput)) {
-                        Toast.makeText(this, "登录成功", 0).show();
+                        Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
+
+                        SharedPreferences.Editor edit=sp.edit();
+                        //记住密码功能
+                        if(rember.isChecked()){
+                            edit.putString("account",accountInput);
+                            edit.putString("password",passwordInput);
+                        }else{
+                            edit.clear();
+                        }
+                        edit.commit();
                         return;
                     }
                 }
-                Toast.makeText(this, "账号或密码错误", 0).show();
+                Toast.makeText(this, "账号或密码错误", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_register:
                 gotoRegister(it);
