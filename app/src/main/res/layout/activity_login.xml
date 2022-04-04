@@ -47,7 +47,7 @@
             android:id="@+id/sqllite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="sqllite" />
+            android:text="通讯录" />
 
         <LinearLayout
             android:layout_width="match_parent"
