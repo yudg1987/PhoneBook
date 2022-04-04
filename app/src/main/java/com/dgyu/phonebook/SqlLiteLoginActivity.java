@@ -18,8 +18,9 @@ public class SqlLiteLoginActivity extends AppCompatActivity implements View.OnCl
     EditText username;
     EditText password;
     Button login, register;
-    SharedPreferences sp=null;
+    SharedPreferences sp = null;
     private CheckBox rember;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +79,8 @@ public class SqlLiteLoginActivity extends AppCompatActivity implements View.OnCl
                         edit.clear();
                     }
                     edit.commit();
-                    Intent it=new Intent();
-                    it.setClass(this,MainActivity.class);
+                    Intent it = new Intent();
+                    it.setClass(this, MainActivity.class);
                     startActivity(it);
                 } else {
                     Log.i("TAG", "登录失败");

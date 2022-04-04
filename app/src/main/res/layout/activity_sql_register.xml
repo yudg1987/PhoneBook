@@ -114,6 +114,22 @@
 
         <TableRow >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="选择头像："
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"/>
+        </TableRow>
+
+        <TableRow >
+
             <TextView />
 
             <LinearLayout >
@@ -126,7 +142,7 @@
                     android:id="@+id/Register"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="注册" />
+                    android:text="保存" />
             </LinearLayout>
         </TableRow>
     </TableLayout>
