@@ -24,5 +24,4 @@
     </application>
     <!--开启拨号权限-->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
 </manifest>

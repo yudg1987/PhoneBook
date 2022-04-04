@@ -1,10 +1,14 @@
 package com.dgyu.phonebook;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private MyRecycleViewAdapter mAdapter;//适配器
     private LinearLayoutManager mLinearLayoutManager;//布局管理器
     private List mList;
+    final public static int REQUEST_CODE_ASK_CALL_PHONE=123;
 
 
     @Override
@@ -46,13 +53,42 @@ public class MainActivity extends AppCompatActivity {
         mRecycleView.setLayoutManager(mLinearLayoutManager);
         //设置适配器adapter
         mRecycleView.setAdapter(mAdapter);
+
+
     }
 
-    @Override
+    /**
+     * 检查权限后的回调
+     * @param requestCode 请求码
+     * @param permissions  权限
+     * @param grantResults 结果
+     */
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (permissions.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(MainActivity.this, "请允许拨号权限后重试", Toast.LENGTH_SHORT).show();
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PHONE: //拨打电话
+                if (permissions.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {//失败
+                    Toast.makeText(this, "请允许拨号权限后再试", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }*/
+
+    //动态权限申请后处理
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PHONE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted callDirectly(mobile);
+                } else {
+                    // Permission Denied Toast.makeText(MainActivity.this,"CALL_PHONE Denied", Toast.LENGTH_SHORT) .show();
+                    Toast.makeText(this, "请允许拨号权限后再试", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -112,32 +148,40 @@ public class MainActivity extends AppCompatActivity {
                     mContext.startActivity(it);
                 }
             });
-
             //拨号功能
-            /*holder.call.setOnClickListener(new View.OnClickListener() {
+            holder.call.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("拨打了电话");
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    Uri data = Uri.parse("tel:" + user.getPhone());
-                    intent.setData(data);
-                    mContext.startActivity(intent);
+
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext,
+                                Manifest.permission.CALL_PHONE);
+                        if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions((Activity) mContext, new String[] {
+                                    Manifest.permission.CALL_PHONE
+                            }, REQUEST_CODE_ASK_CALL_PHONE);
+                            return;
+                        } else {
+                            // 上面已经写好的拨号方法 callDirectly(mobile);
+                            System.out.println("Android23以上拨打了电话");
+                            Log.i("onBindViewHolder", "拨打了电话");
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            Uri data = Uri.parse("tel:" + user.getPhone());
+                            intent.setData(data);
+                            mContext.startActivity(intent);
+                        }
+                    } else {
+                        // 上面已经写好的拨号方法 callDirectly(mobile);
+                        System.out.println("Android23以下拨打了电话");
+                        Log.i("onBindViewHolder", "拨打了电话");
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        Uri data = Uri.parse("tel:" + user.getPhone());
+                        intent.setData(data);
+                        mContext.startActivity(intent);
+                    }
+
+
                 }
-            });*/
-
-            holder.call.setOnClickListener(new View.OnClickListener()
-            {
-
-                @Override
-                public void onClick(View v)
-                {
-                    Toast.makeText(mContext,"需要给他打电话吗",Toast.LENGTH_SHORT);
-                    //传入服务， parse（）解析号码
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + user.getPhone()));
-                    //通知activtity处理传入的call服务
-                    mContext.startActivity(intent);
-                }
-
             });
         }
 
